@@ -1,0 +1,90 @@
+
+<h2 class="animated tada">
+  <i class="far fa-address-card"></i>
+  Lista de Contatos
+</h2>
+<div *ngIf="errorMessage" [ngClass]="(success)?'success':'danger'">
+  {{ errorMessage }}
+</div>
+
+
+<div class="row" *ngIf="modo=='List'">
+  <ul class="animated flipInX">
+    <li *ngIf="contatos.length==0">Não existem contatos!</li>
+    <li *ngFor="let item of contatos">
+      {{ item.primeiroNome }}
+      {{ item.ultimoNome }} -
+      {{ item.email }}
+      &nbsp;
+      <button (click)="edit(item)"><i class="far fa-file"></i></button>
+      <button (click)="remove(item)"><i class="far fa-trash-alt"></i></button>
+    </li>
+  </ul>
+  
+  <div class="w-100 p-3">
+    <br />
+      <button class="button float-right" (click)="alterarModo()"><i class="far fa-user-plus"></i> Criar Novo</button>
+  </div>
+</div>
+
+
+<div id="mod" *ngIf="modo=='Novo'" class="animated flipInX">
+  <form [formGroup]="form" autocomplete="off">
+
+    <fieldset>
+      <div class="form-group" *ngIf="id">
+        <label for="Id">Id: </label>
+        <input type="text" class="form-control" maxlength="60" formControlName="id" readonly="readonly">
+      </div>
+
+      <div class="form-group">
+        <label for="primeiroNome">Primeiro Nome: </label>
+        <input type="text" class="form-control" maxlength="60" formControlName="primeiroNome" id="primeiroNome">
+
+        <small class="danger" *ngIf="form.controls.primeiroNome.invalid && !form.controls.primeiroNome.pristine">
+          Primeiro Nome Inválido!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="ultimoNome">Ultimo Nome: </label>
+        <input type="text" class="form-control" maxlength="60" formControlName="ultimoNome" id="ultimoNome">
+
+        <small class="danger" *ngIf="form.controls.ultimoNome.invalid && !form.controls.ultimoNome.pristine">
+          Ultimo Nome Inválido!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail: </label>
+        <input type="email" class="form-control" maxlength="60" formControlName="email" id="email">
+
+        <small class="danger" *ngIf="form.controls.email.invalid && !form.controls.email.pristine">
+          E-mail inválido!
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="telefoneDDD">DDD e Telefone: </label>
+        <input type="number" class="form-control" maxlength="2" formControlName="telefoneDDD" id="telefoneDDD">
+        <input type="number" class="form-control" maxlength="9" formControlName="telefoneNumero" id="telefoneNumero">
+
+        <small class="danger" *ngIf="form.controls.telefoneDDD.invalid && !form.controls.telefoneDDD.pristine">
+          DDD inválido!
+        </small>
+        <small class="danger" *ngIf="form.controls.telefoneNumero.invalid && !form.controls.telefoneNumero.pristine">
+          Telefone inválido!
+        </small>
+
+      </div>
+
+      <br />
+      <div class="text-center">
+        <button class="button" [disabled]="form.invalid" (click)="salvar()"><i class="far fa-save"></i> Salvar</button>
+        <button class="button" (click)="voltar()"><i class="far fa-undo"></i> Voltar</button>
+      </div>
+
+
+    </fieldset>
+  </form>
+</div>
