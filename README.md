@@ -1,9 +1,12 @@
------------------------------
-Cadastro de Contatos v0.1
+# Cadastro de Contatos
 -----------------------------
 
 Aplicação simples apenas para exemplo, escrita em .Net Core 3.1 
 separada em camadas com arquitetura DDD, CQRS e frontend com Angular 8.
+
+
+Acesse a live demo em https://contatoapp.azurewebsites.net/
+
 
 TODO: 
  - Habilitar autenticação no Google.com e Facebook.com;
