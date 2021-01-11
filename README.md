@@ -10,13 +10,15 @@ TODO:
 
 App:
 
-![App - Listagem](https://github.com/psmarques/contatoapp/blob/main/docs/app1.png?raw=true)
+Listagem
+![](https://raw.githubusercontent.com/psmarques/contatoapp/main/Docs/App1.png)
 
-![App - Cadastro](https://github.com/psmarques/contatoapp/blob/main/docs/app2.png?raw=true)
+Cadastro
+![](https://raw.githubusercontent.com/psmarques/contatoapp/main/Docs/App2.png)
 
 
 Arquitetura:
-![Arquiteutra](https://github.com/psmarques/contatoapp/blob/main/docs/arquitetura.png?raw=true)
+![](https://raw.githubusercontent.com/psmarques/contatoapp/main/Docs/arquitetura.png)
 
 
 Changeset:
