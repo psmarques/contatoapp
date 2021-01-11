@@ -8,15 +8,18 @@ separada em camadas com arquitetura DDD, CQRS e frontend com Angular 8.
 TODO: 
  - Habilitar autenticação no Google.com e Facebook.com;
 
-![Arquiteutra](docs/arquitetura.png?raw=true)
+App:
 
-![App - Listagem](docs/app1.png?raw=true)
+![App - Listagem](https://github.com/psmarques/contatoapp/blob/main/docs/app1.png?raw=true)
 
-![App - Cadastro](docs/app2.png?raw=true)
+![App - Cadastro](https://github.com/psmarques/contatoapp/blob/main/docs/app2.png?raw=true)
 
 
-Changeset
+Arquitetura:
+![Arquiteutra](https://github.com/psmarques/contatoapp/blob/main/docs/arquitetura.png?raw=true)
+
+
+Changeset:
 -----------------------------
-
-10/01/2021
+11/01/2021
  - Ajuste do Readme
