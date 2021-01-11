@@ -18,7 +18,7 @@ Cadastro
 
 
 Arquitetura:
-![](https://raw.githubusercontent.com/psmarques/contatoapp/main/Docs/arquitetura.png)
+![](https://raw.githubusercontent.com/psmarques/contatoapp/main/Docs/Arquiteura.png)
 
 
 Changeset:
