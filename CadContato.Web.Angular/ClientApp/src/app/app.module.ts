@@ -8,27 +8,48 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { contatoService } from '../services/contato.service';
 import { ErrorHandlerService } from '../services/errorHandler.service';
-import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { appInsightsLogService } from '../services/logging.service';
+import { LoaderComponent } from '../shared/loader/loader.component';
+import { LoaderService } from '../services/loader.service';
+import { ReqHttpInterceptor } from '../interceptors/reqhttp.interceptor';
+import { LoginComponent } from './login/login.component';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login'
+import { environment } from '../environments/environment.prod';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    LoaderComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    SocialLoginModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
     ])
   ],
-  providers: [contatoService, appInsightsLogService,
+  providers: [contatoService, appInsightsLogService, LoaderService,
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
+    { provide: HTTP_INTERCEPTORS, useClass: ReqHttpInterceptor, multi: true },
     {
-      provide: ErrorHandler, useClass: ErrorHandlerService
-    }],
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.googleClientId,
+                                              {scope: 'profile email'})
+          }
+        ]
+      } as SocialAuthServiceConfig
+    }
+  ],
 
   bootstrap: [AppComponent]
 })

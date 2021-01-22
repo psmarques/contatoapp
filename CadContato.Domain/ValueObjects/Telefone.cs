@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CadContato.Domain.ValueObjects
 {
-    public class Telefone : ValueObject
+    public class Telefone : ValueObject, IEquatable<Telefone>
     {
         public int? DDD { get; private set; }
 
@@ -46,5 +46,39 @@ namespace CadContato.Domain.ValueObjects
                 );
         }
 
+        public bool Equals(Telefone other)
+        {
+            if (other == null) return false;
+            return string.Equals(this.DDD, other.DDD) &&
+                   string.Equals(this.Numero, other.Numero);
+        }
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Telefone);
+        }
+
+        public static bool operator ==(Telefone obj1, Telefone obj2)
+        {
+            if (obj1 == null && obj2 == null) return true;
+            if (obj1 == null || obj2 == null) return false;
+
+            return obj1.Equals(obj2);
+        }
+
+        public static bool operator !=(Telefone obj1, Telefone obj2)
+        {
+            return !(obj1 == obj2);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 7;
+
+                hash = hash * 13 + (Numero ?? 1).GetHashCode();
+                return hash;
+            }
+        }
     }
 }

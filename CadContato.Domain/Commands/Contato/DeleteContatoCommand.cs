@@ -11,6 +11,11 @@ namespace CadContato.Domain.Commands.Contato
     {
         public string Id { get; set; }
 
+        public string UsuarioNome { get; set; }
+
+        public string UsuarioEmail { get; set; }
+
+
         public DeleteContatoCommand(string id)
         {
             Id = id;

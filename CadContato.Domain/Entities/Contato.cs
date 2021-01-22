@@ -14,6 +14,8 @@ namespace CadContato.Domain.Entities
 
         public Telefone Telefone { get; private set; }
 
+        public User User { get; private set; }
+
         private Contato() { }
 
         public Contato(Nome nome, Email email, Telefone telefone)
@@ -21,6 +23,16 @@ namespace CadContato.Domain.Entities
             Nome = nome;
             Email = email;
             Telefone = telefone;
+
+            Validate();
+        }
+
+        public Contato(Nome nome, Email email, Telefone telefone, User user)
+        {
+            Nome = nome;
+            Email = email;
+            Telefone = telefone;
+            User = user;
 
             Validate();
         }
@@ -49,6 +61,7 @@ namespace CadContato.Domain.Entities
             AddNotifications(Nome);
             AddNotifications(Email);
             AddNotifications(Telefone);
+            //AddNotifications(User);
         }
     }
 }

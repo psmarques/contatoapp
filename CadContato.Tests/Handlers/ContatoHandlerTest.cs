@@ -19,7 +19,7 @@ namespace CadContato.Tests.Handlers
         public void DeveRetornarErroEmailInvalido()
         {
             var tst = new CreateContatoCommandTest();
-            var handler = new ContatoHandler(new FakeContatoRepository());
+            var handler = new ContatoHandler(new FakeContatoRepository(), new FakeUserRepository());
 
             var r = (GenericCommandResult) handler.Handle(tst.CommandInvalido);
             Assert.IsFalse(r.Success);

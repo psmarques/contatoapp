@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CadContato.Domain.ValueObjects
 {
-    public class Nome : ValueObject
+    public class Nome : ValueObject, IEquatable<Nome>
     {
         public string PrimeiroNome { get; private set; }
 
@@ -23,9 +23,6 @@ namespace CadContato.Domain.ValueObjects
             Validate();
         }
 
-
-
-
         private void Validate()
         {
             AddNotifications(new Contract()
@@ -39,6 +36,41 @@ namespace CadContato.Domain.ValueObjects
         public override string ToString()
         {
             return string.Concat(PrimeiroNome, ' ', UltimoNome);
+        }
+
+        public bool Equals(Nome other)
+        {
+            if (other == null) return false;
+            return string.Equals(this.PrimeiroNome, other.PrimeiroNome) &&
+                   string.Equals(this.UltimoNome, other.UltimoNome);
+        }
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Nome);
+        }
+
+        public static bool operator ==(Nome obj1, Nome obj2)
+        {
+            if (obj1 == null && obj2 == null) return true;
+            if (obj1 == null || obj2 == null) return false;
+
+            return obj1.Equals(obj2);
+        }
+
+        public static bool operator !=(Nome obj1, Nome obj2)
+        {
+            return !(obj1 == obj2);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 5;
+
+                hash = hash * 7 + (PrimeiroNome ?? string.Empty).GetHashCode();
+                return hash;
+            }
         }
     }
 }

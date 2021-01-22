@@ -9,7 +9,9 @@ export class contatoService {
 
   private http: HttpClient;
   private baseUrl: string;
-  private headerOptions = { headers: new HttpHeaders().set('Content-Type', 'application/json') }
+  private headerOptions = {
+    headers: new HttpHeaders().set('Content-Type', 'application/json')
+  };
 
   constructor(httpClient: HttpClient, @Inject('BASE_URL') pBaseUrl: string) {
     this.http = httpClient;

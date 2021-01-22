@@ -1,0 +1,9 @@
+
+<div *ngIf="!user" class="nav nav-fill">
+  <button type="button" (click)="signInWithGoogle()" class="button">Login <img src="../../assets/google_icon.png" /></button>
+</div>
+
+<div *ngIf="user" class="nav nav-fill">
+  <small><i class="far fa-user"></i> {{ user.name }} - {{ user.email }} <a href="" (click)="signOut()">Logout</a></small>
+  
+</div>

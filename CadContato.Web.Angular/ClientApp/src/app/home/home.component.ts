@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SocialUser } from 'angularx-social-login';
 import { Contato } from '../../models/contato.model';
 import { contatoService } from '../../services/contato.service';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   public errorMessage: String;
   public contatos: Contato[] = [];
@@ -15,10 +18,12 @@ export class HomeComponent {
   public form: FormGroup;
   public modo: String = "List";
   public success: Boolean = false;
+  public versao: String = "1.0.1";
+  public user: SocialUser;
 
   id: String;
 
-  constructor(private fb: FormBuilder, private apiContato: contatoService) {
+  constructor(private fb: FormBuilder, private apiContato: contatoService, private session: SessionService) {
 
     this.form = this.fb.group({
       id: [],
@@ -29,12 +34,37 @@ export class HomeComponent {
       telefoneNumero: ['', Validators.compose([Validators.min(10000000), Validators.max(999999999)])]
     });
 
-    this.loadContatos();
+  }
+
+  ngOnInit(): void {
+    //throw new Error('Method not implemented.');
+    this.user = this.session.getUser();
+
+    this.session.userObservable.subscribe(val => {
+
+      if (val == null) return;
+      this.user = val as SocialUser;
+
+      this.loadContatos();
+    });
+
+    if (this.user != null)
+      this.loadContatos();
+  }
+
+  ngOnDestroy(): void {
+    this.session.userObservable.unsubscribe();
   }
 
   private loadContatos() {
 
+    this.user = this.session.getUser();
+
+    if (this.user == null)
+      return;
+
     this.apiContato.getAll().subscribe(result => {
+      console.log(result);
       this.contatos = result;
     },
       error => {

@@ -1,5 +1,6 @@
 ﻿using CadContato.Domain.Entities;
 using CadContato.Domain.ValueObjects;
+using CadContato.Shared.Util;
 using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,24 +15,34 @@ namespace CadContato.Domain.Infra.Contexts
             IsInMemory = Database.IsInMemory();
         }
 
-        public DbSet<Contato> Contatos {get;set; }
+        public DbSet<Contato> Contatos { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Ignore<ValueObject>();
             modelBuilder.Ignore<Notification>();
             modelBuilder.Ignore<Nome>();
             modelBuilder.Ignore<Email>();
             modelBuilder.Ignore<Telefone>();
 
-            modelBuilder.Entity<Contato>().ToTable("Contato");
+            var builderContato = modelBuilder.Entity<Contato>();
+            var builderUser = modelBuilder.Entity<User>();
 
-            modelBuilder.Entity<Contato>().OwnsOne(x => x.Nome).Property(x => x.PrimeiroNome).HasColumnName("PrimeiroNome").HasMaxLength(250);
-            modelBuilder.Entity<Contato>().OwnsOne(x => x.Nome).Property(x => x.UltimoNome).HasColumnName("UltimoNome").HasMaxLength(250);
+            builderContato.ToTable("Contato");
 
-            modelBuilder.Entity<Contato>().OwnsOne(x => x.Email).Property(x => x.Address).HasColumnName("Email").HasMaxLength(250);
+            builderContato.OwnsOne(x => x.Nome).Property(y => y.PrimeiroNome).HasColumnName("PrimeiroNome").HasDefaultValue(string.Empty).HasMaxLength(250);
+            builderContato.OwnsOne(x => x.Nome).Property(y => y.UltimoNome).HasColumnName("UltimoNome").HasDefaultValue(string.Empty).HasMaxLength(250);
+            builderContato.OwnsOne(x => x.Email).Property(y => y.Address).HasColumnName("Email").HasDefaultValue(string.Empty).HasMaxLength(250);
+            builderContato.OwnsOne(x => x.Telefone).Property(y => y.DDD).HasColumnName("TelefoneDDD");
+            builderContato.OwnsOne(x => x.Telefone).Property(y => y.Numero).HasColumnName("TelefoneNumero");
 
-            modelBuilder.Entity<Contato>().OwnsOne(x => x.Telefone).Property(x => x.DDD).HasColumnName("TelefoneDDD");
-            modelBuilder.Entity<Contato>().OwnsOne(x => x.Telefone).Property(x => x.Numero).HasColumnName("TelefoneNumero");
+            builderContato.HasOne(u => u.User)
+                          .WithMany(c => c.Contatos);
+
+            builderUser.ToTable("User");
+            builderUser.Property(x => x.NomeCompleto).HasMaxLength(250);
+            builderUser.OwnsOne(x => x.Email).Property(y => y.Address).HasColumnName("EmailUser").HasMaxLength(250);
         }
     }
 }

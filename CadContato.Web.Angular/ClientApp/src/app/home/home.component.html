@@ -8,8 +8,8 @@
 </div>
 
 
-<div class="row" *ngIf="modo=='List'">
-  <ul class="animated flipInX">
+<div *ngIf="modo=='List' && user" class="animated flipInX mod">
+  <ul>
     <li *ngIf="contatos.length==0">Não existem contatos!</li>
     <li *ngFor="let item of contatos">
       {{ item.primeiroNome }}
@@ -19,16 +19,19 @@
       <button (click)="edit(item)"><i class="far fa-file"></i></button>
       <button (click)="remove(item)"><i class="far fa-trash-alt"></i></button>
     </li>
-  </ul>
-  
-  <div class="w-100 p-3">
-    <br />
+    <li>
       <button class="button float-right" (click)="alterarModo()"><i class="far fa-user-plus"></i> Criar Novo</button>
-  </div>
+    </li>
+  </ul>
 </div>
 
+<div *ngIf="!user" class="animated flipInX mod">
+  <ul>
+    <li>Faça Login clicando no botão acima!</li>
+  </ul>
+</div>
 
-<div id="mod" *ngIf="modo=='Novo'" class="animated flipInX">
+<div *ngIf="modo=='Novo'" class="animated flipInX mod">
   <form [formGroup]="form" autocomplete="off">
 
     <fieldset>

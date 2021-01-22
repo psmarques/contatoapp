@@ -15,7 +15,8 @@ namespace CadContato.WebApi.Util
                 PrimeiroNome = contato.Nome.PrimeiroNome,
                 UltimoNome = contato.Nome.UltimoNome,
                 TelefoneDDD = contato.Telefone.DDD.HasValue ? contato.Telefone.DDD.ToString() : string.Empty,
-                TelefoneNumero = contato.Telefone.Numero.HasValue ? contato.Telefone.Numero.ToString() : string.Empty
+                TelefoneNumero = contato.Telefone.Numero.HasValue ? contato.Telefone.Numero.ToString() : string.Empty,
+                UsuarioEmail = contato.User.Email.Address
             };
         }
 

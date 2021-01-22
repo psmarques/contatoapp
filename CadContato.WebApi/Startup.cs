@@ -28,36 +28,41 @@ namespace CadContato.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             //Banco de Dados
-            //services.AddDbContext<DataContext>(opt => opt.UseSqlite(Environment.GetEnvironmentVariable("ConnStr")));
+            //services.AddDbContext<DataContext>(opt => opt.UseSqlite(Config.GetConnectionString("SQLite")));
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("db"));
 
             //Repositorios
             services.AddTransient<IContatoRepository, ContatoRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             //Handlers
             services.AddTransient<ContatoHandler, ContatoHandler>();
 
-            //Jwt Authentication
+            //Google Auth
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(jwt => jwt.UseGoogle(Environment.GetEnvironmentVariable("CadContato_GoogleClientId")));
+
+            //Custom Auth
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //.AddJwtBearer(options =>
             //{
-            //    options.Authority = Environment.GetEnvironmentVariable("JwtAuthority");
+            //    options.Authority = Environment.GetEnvironmentVariable("CadContato:JwtAuthority");
             //    options.TokenValidationParameters = new TokenValidationParameters
             //    {
             //        ValidateIssuer = true,
-            //        ValidIssuer = Environment.GetEnvironmentVariable("JwtIssuer"),
+            //        ValidIssuer = Environment.GetEnvironmentVariable("CadContato:JwtIssuer"),
             //        ValidateAudience = true,
-            //        ValidAudience = Environment.GetEnvironmentVariable("JwtValidAudience"),
+            //        ValidAudience = Environment.GetEnvironmentVariable("CadContato:JwtValidAudience"),
             //        ValidateLifetime = true
             //    };
             //});
-
-            //services.AddNewtonsotJson(x => x.)
 
             //Controllers
             services.AddControllers().AddJsonOptions(opts =>
             {
                 opts.JsonSerializerOptions.Converters.Insert(0, new Util.CustomJsonConverter());
+                opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                opts.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
             });
         }
 
@@ -72,14 +77,16 @@ namespace CadContato.WebApi
             //app.UseHttpsRedirection();
             app.UseRouting();
 
+            //TODO: Configurar o Cors
             app.UseCors(x => x.AllowAnyOrigin()
                             .AllowAnyMethod()
                             .AllowAnyHeader());
 
             //Jwt Auth
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
+            //Mapear Controllers
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

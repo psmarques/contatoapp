@@ -37,6 +37,11 @@ namespace CadContato.Tests.Mocks
             return lst;
         }
 
+        public IEnumerable<Contato> GetAllByMail(string email)
+        {
+            return lst.Where(x => x.User.Email.Address == email);
+        }
+
         public Contato GetById(Guid id)
         {
             return lst.FirstOrDefault(x => x.Id == id);

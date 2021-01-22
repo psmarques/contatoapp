@@ -15,10 +15,12 @@ namespace CadContato.Domain.Handlers
         IHandler<CreateContatoCommand>
     {
         private readonly IContatoRepository _repo;
+        private readonly IUserRepository _repoUser;
 
-        public ContatoHandler(IContatoRepository repo)
+        public ContatoHandler(IContatoRepository repo, IUserRepository repoUser)
         {
             _repo = repo;
+            _repoUser = repoUser;
         }
 
         public ICommandResult Handle(DeleteContatoCommand command)
@@ -67,10 +69,19 @@ namespace CadContato.Domain.Handlers
             if (command.Invalid)
                 return new GenericCommandResult(command.Notifications);
 
+            //verifca se o usuário existe e então o cria caso não exista
+            var u = _repoUser.GetByEmail(command.UsuarioEmail);
+            if(u == null)
+            {
+                u = new User(command.UsuarioNome, new ValueObjects.Email(command.UsuarioEmail));
+                _repoUser.Create(u);
+            }
+                
             //Instacia e já faz as Validações de Negócio da Entity
             var contato = new Contato(new ValueObjects.Nome(command.PrimeiroNome, command.UltimoNome),
-                new ValueObjects.Email(command.Email),
-                new ValueObjects.Telefone(command.TelefoneDDD, command.TelefoneNumero));
+                                      new ValueObjects.Email(command.Email),
+                                      new ValueObjects.Telefone(command.TelefoneDDD, command.TelefoneNumero),
+                                      u);
 
             if (contato.Invalid)
                 return new GenericCommandResult(contato.Notifications);

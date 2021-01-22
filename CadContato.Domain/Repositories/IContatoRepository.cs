@@ -7,6 +7,7 @@ namespace CadContato.Domain.Repositories
 {
     public interface IContatoRepository : IRepository<Contato>
     {
+        IEnumerable<Contato> GetAllByMail(string email);
 
         IEnumerable<Contato> GetAll();
 

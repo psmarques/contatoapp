@@ -18,5 +18,7 @@ namespace CadContato.WebApi.Models
 
         public string TelefoneNumero { get; set; }
 
+        public string UsuarioEmail { get; set; }
+
     }
 }

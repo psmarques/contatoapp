@@ -11,6 +11,7 @@ namespace CadContato.Tests.Entities
         private Email emailInvalido;
         private Email emailValido;
         private Telefone telefoneValido;
+        private User usuario;
 
 
         public ContatoTest()
@@ -19,6 +20,7 @@ namespace CadContato.Tests.Entities
             emailInvalido = new Email("asd@asd");
             emailValido = new Email("asdasd@asd.com");
             telefoneValido = new Telefone(11, 999912345);
+            usuario = new User("Teste", emailValido);
         }
 
         [TestMethod]
@@ -26,11 +28,23 @@ namespace CadContato.Tests.Entities
         {
             var c = new Contato(nomeValido,
                                 emailInvalido,
-                                telefoneValido);
+                                telefoneValido,
+                                usuario);
 
             Assert.IsFalse(c.Valid);
             Assert.IsTrue(c.Notifications.Count > 0);
         }
 
+
+        [TestMethod]
+        public void DeveRetornarTrueEmailValido()
+        {
+            var c = new Contato(nomeValido,
+                                emailValido,
+                                telefoneValido,
+                                usuario);
+
+            Assert.IsTrue(c.Valid);
+        }
     }
 }
