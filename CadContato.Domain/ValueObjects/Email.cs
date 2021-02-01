@@ -1,8 +1,6 @@
 ﻿using CadContato.Shared.Util;
 using Flunt.Validations;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CadContato.Domain.ValueObjects
 {

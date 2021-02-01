@@ -1,5 +1,4 @@
 ﻿using CadContato.Domain.ValueObjects;
-using Flunt.Validations;
 using System.Collections.Generic;
 
 namespace CadContato.Domain.Entities
@@ -10,22 +9,26 @@ namespace CadContato.Domain.Entities
 
         public Email Email { get; private set; }
 
+        public string Picture { get; private set; }
+
         public ICollection<Contato> Contatos { get; private set; }
 
         private User() { }
 
-        public User(string nomeCompleto, Email email)
+        public User(string nomeCompleto, Email email, string picture)
         {
             this.NomeCompleto = nomeCompleto;
             this.Email = email;
+            this.Picture = picture;
 
             this.Validate();
         }
 
-        public User(string nomeCompleto, Email email, ICollection<Contato> contatos)
+        public User(string nomeCompleto, Email email, string picture, ICollection<Contato> contatos)
         {
             this.NomeCompleto = nomeCompleto;
             this.Email = email;
+            this.Picture = picture;
             this.Contatos = contatos;
 
             this.Validate();

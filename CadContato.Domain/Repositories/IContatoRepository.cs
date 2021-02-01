@@ -1,7 +1,5 @@
 ﻿using CadContato.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CadContato.Domain.Repositories
 {

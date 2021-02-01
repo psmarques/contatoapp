@@ -2,6 +2,7 @@ using CadContato.Domain.Handlers;
 using CadContato.Domain.Infra.Contexts;
 using CadContato.Domain.Infra.Repositories;
 using CadContato.Domain.Repositories;
+using CadContato.WebApi.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,23 +40,24 @@ namespace CadContato.WebApi
             services.AddTransient<ContatoHandler, ContatoHandler>();
 
             //Google Auth
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(jwt => jwt.UseGoogle(Environment.GetEnvironmentVariable("CadContato_GoogleClientId")));
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(jwt => jwt.UseGoogle(Environment.GetEnvironmentVariable("CadContato_GoogleClientId")));
 
             //Custom Auth
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //.AddJwtBearer(options =>
-            //{
-            //    options.Authority = Environment.GetEnvironmentVariable("CadContato:JwtAuthority");
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidIssuer = Environment.GetEnvironmentVariable("CadContato:JwtIssuer"),
-            //        ValidateAudience = true,
-            //        ValidAudience = Environment.GetEnvironmentVariable("CadContato:JwtValidAudience"),
-            //        ValidateLifetime = true
-            //    };
-            //});
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "https://accounts.google.com";
+                options.Audience = Environment.GetEnvironmentVariable("CadContato_GoogleClientId");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "accounts.google.com",
+                    ValidateAudience = true,
+                    ValidAudience = Environment.GetEnvironmentVariable("CadContato_GoogleClientId"),
+                    ValidateLifetime = true
+                };
+            });
 
             //Controllers
             services.AddControllers().AddJsonOptions(opts =>
@@ -69,10 +71,15 @@ namespace CadContato.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //Handling exceptions
+            app.ConfigureExceptionHanlder();
 
             //app.UseHttpsRedirection();
             app.UseRouting();

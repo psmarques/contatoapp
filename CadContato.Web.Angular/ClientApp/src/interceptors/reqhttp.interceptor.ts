@@ -20,7 +20,12 @@ export class ReqHttpInterceptor implements HttpInterceptor {
 
     console.log(newReq);
 
-    return next.handle(newReq).pipe(finalize(() => this.loaderService.hide()));
+    return next.handle(newReq).pipe(finalize(() => {
+
+      console.log("error");
+      this.loaderService.hide();
+
+    }));
 
   }
 }

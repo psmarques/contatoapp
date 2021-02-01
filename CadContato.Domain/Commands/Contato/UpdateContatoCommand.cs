@@ -1,9 +1,6 @@
 ﻿using CadContato.Shared.Commands;
 using Flunt.Notifications;
 using Flunt.Validations;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CadContato.Domain.Commands.Contato
 {
@@ -20,10 +17,6 @@ namespace CadContato.Domain.Commands.Contato
         public string TelefoneDDD { get; set; }
 
         public string TelefoneNumero { get; set; }
-        
-        public string UsuarioNome { get; set; }
-
-        public string UsuarioEmail { get; set; }
 
         public UpdateContatoCommand(string id, string primeiroNome, string ultimoNome, string email, string telefoneDDD, string telefoneNumero)
         {

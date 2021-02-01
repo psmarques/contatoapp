@@ -7,11 +7,11 @@ namespace CadContato.Tests.Entities
     [TestClass]
     public class ContatoTest
     {
-        private Nome nomeValido;
-        private Email emailInvalido;
-        private Email emailValido;
-        private Telefone telefoneValido;
-        private User usuario;
+        private readonly Nome nomeValido;
+        private readonly Email emailInvalido;
+        private readonly Email emailValido;
+        private readonly Telefone telefoneValido;
+        private readonly User usuario;
 
 
         public ContatoTest()
@@ -20,7 +20,7 @@ namespace CadContato.Tests.Entities
             emailInvalido = new Email("asd@asd");
             emailValido = new Email("asdasd@asd.com");
             telefoneValido = new Telefone(11, 999912345);
-            usuario = new User("Teste", emailValido);
+            usuario = new User("Teste", emailValido, string.Empty);
         }
 
         [TestMethod]

@@ -1,10 +1,8 @@
 ﻿using CadContato.Domain.Entities;
 using CadContato.Domain.Infra.Contexts;
 using CadContato.Domain.Repositories;
-using System;
-using System.Collections.Generic;
+using CadContato.Domain.ValueObjects;
 using System.Linq;
-using System.Text;
 
 namespace CadContato.Domain.Infra.Repositories
 {
@@ -16,7 +14,16 @@ namespace CadContato.Domain.Infra.Repositories
 
         public User GetByEmail(string email)
         {
+            //Não suporta string.Compare(... ordinalIgnoreCase);
+            //Bug do EF Core forçar a obter o a query correta
             return ctx.Users.FirstOrDefault(x => x.Email.Address == email);
+        }
+
+        public User GetByEmail(Email email)
+        {
+            //Não suporta string.Compare(... ordinalIgnoreCase);
+            //Bug do EF Core forçar a obter o a query correta
+            return ctx.Users.FirstOrDefault(x => x.Email.Address == email.Address);
         }
     }
 }

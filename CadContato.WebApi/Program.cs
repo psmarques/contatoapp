@@ -1,14 +1,8 @@
 using CadContato.Domain.Infra.Contexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CadContato.WebApi
 {
@@ -20,11 +14,11 @@ namespace CadContato.WebApi
 
             //if(args.Contains("migrate=1") || !System.IO.File.Exists("cadContato.db"))
             //{
-            //    using (var scope = host.Services.CreateScope())
-            //    {
-            //        var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-            //        db.Database.Migrate();
-            //    }
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+            //    db.Database.Migrate();
+            //}
             //}
 
             host.Run();

@@ -2,13 +2,13 @@
 using CadContato.Domain.Handlers;
 using CadContato.Domain.Repositories;
 using CadContato.Shared.Commands;
+using CadContato.Shared.Util;
 using CadContato.WebApi.Models;
 using CadContato.WebApi.Util;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 
 namespace CadContato.WebApi.Controllers
 {
@@ -23,7 +23,7 @@ namespace CadContato.WebApi.Controllers
         [HttpGet]
         public IEnumerable<ContatoDTO> GetAll([FromServices] IContatoRepository repo, [FromQuery] string filter)
         {
-            var u = ClaimsHelper.GetUserDtoFromHttpContext(HttpContext);
+            var clHelper = new ClaimsHelper(HttpContext.User);
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -31,7 +31,7 @@ namespace CadContato.WebApi.Controllers
                            .Select(x => ContatoConverter.Convert(x));
             }
 
-            return repo.GetAllByMail(u.Email)
+            return repo.GetAllByMail(clHelper.Email)
                        .Select(x => ContatoConverter.Convert(x));
         }
 
@@ -46,11 +46,7 @@ namespace CadContato.WebApi.Controllers
             [FromServices] ContatoHandler hnd,
             [FromBody] CreateContatoCommand cmd)
         {
-            var u = ClaimsHelper.GetUserDtoFromHttpContext(HttpContext);
-            cmd.UsuarioEmail = u.Email;
-            //cmd.UsuarioNome = u.Name;
-
-            return (GenericCommandResult)hnd.Handle(cmd);
+            return (GenericCommandResult)hnd.Handle(cmd, HttpContext.User);
         }
 
         [Route("")]
@@ -59,11 +55,7 @@ namespace CadContato.WebApi.Controllers
             [FromServices] ContatoHandler hnd,
             [FromBody] UpdateContatoCommand cmd)
         {
-            var u = ClaimsHelper.GetUserDtoFromHttpContext(HttpContext);
-            cmd.UsuarioEmail = u.Email;
-            //cmd.UsuarioNome = u.Name;
-
-            return (GenericCommandResult)hnd.Handle(cmd);
+            return (GenericCommandResult)hnd.Handle(cmd, HttpContext.User);
         }
 
         [Route("")]
@@ -72,11 +64,7 @@ namespace CadContato.WebApi.Controllers
             [FromServices] ContatoHandler hnd,
             [FromBody] DeleteContatoCommand cmd)
         {
-            var u = ClaimsHelper.GetUserDtoFromHttpContext(HttpContext);
-            cmd.UsuarioEmail = u.Email;
-            //cmd.UsuarioNome = u.Name;
-
-            return (GenericCommandResult)hnd.Handle(cmd);
+            return (GenericCommandResult)hnd.Handle(cmd, HttpContext.User);
         }
 
         #endregion

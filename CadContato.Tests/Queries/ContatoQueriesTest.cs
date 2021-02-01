@@ -1,19 +1,16 @@
 ﻿using CadContato.Domain.Entities;
 using CadContato.Domain.Queries;
 using CadContato.Domain.ValueObjects;
-using CadContato.Tests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CadContato.Tests.Queries
 {
     [TestClass]
     public class ContatoQueriesTest
     {
-        private ICollection<Contato> repo;
+        private readonly ICollection<Contato> repo;
 
         public ContatoQueriesTest()
         {

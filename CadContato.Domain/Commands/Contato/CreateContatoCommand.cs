@@ -16,10 +16,6 @@ namespace CadContato.Domain.Commands.Contato
 
         public string TelefoneNumero { get; set; }
 
-        public string UsuarioNome { get; set; }
-
-        public string UsuarioEmail { get; set; }
-
 
         public CreateContatoCommand(string primeiroNome, string ultimoNome, string email, string telefoneDDD, string telefoneNumero)
         {

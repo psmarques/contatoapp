@@ -1,14 +1,12 @@
 ﻿using CadContato.Domain.Commands.Contato;
-using CadContato.Domain.Entities;
 using CadContato.Domain.Handlers;
 using CadContato.Domain.Repositories;
 using CadContato.WebApi.Models;
 using CadContato.WebApi.Util;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace CadContato.WebApi.Controllers
 {
@@ -22,10 +20,8 @@ namespace CadContato.WebApi.Controllers
         public IEnumerable<ContatoDTO> GetAll([FromServices] IContatoRepository repo, [FromServices] ContatoHandler hnd, [FromQuery] string filter)
         {
             var cmd = new CreateContatoCommand("Paulo", "Marques", "teste@teste.com", "11", "123456789");
-            cmd.UsuarioEmail = "psmarques@gmail.com";
-            cmd.UsuarioNome = "Paulo";
-
-            var r = hnd.Handle(cmd);
+            var fakeClaims = CriarFakeClaims();
+            var r = hnd.Handle(cmd, fakeClaims);
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -39,15 +35,13 @@ namespace CadContato.WebApi.Controllers
 
         [Route("2")]
         [HttpGet]
-        public IEnumerable<ContatoDTO> GetByMail([FromServices] IContatoRepository repo, [FromServices] ContatoHandler hnd, [FromQuery] string filter)
+        public IEnumerable<ContatoDTO> GetByMail([FromServices] IContatoRepository repo, [FromServices] ContatoHandler hnd)
         {
             var cmd = new CreateContatoCommand("Paulo", "Marques", "teste@teste.com", "11", "123456789");
-            cmd.UsuarioEmail = "psmarques@gmail.com";
-            cmd.UsuarioNome = "Paulo";
+            var fakeClaims = CriarFakeClaims();
+            var r = hnd.Handle(cmd, fakeClaims);
 
-            var r = hnd.Handle(cmd);
-
-            return repo.GetAllByMail(cmd.UsuarioEmail)
+            return repo.GetAllByMail("psmarques@gmail.com")
                        .Select(x => ContatoConverter.Convert(x));
         }
 
@@ -59,6 +53,16 @@ namespace CadContato.WebApi.Controllers
         }
 
 
+        private ClaimsPrincipal CriarFakeClaims()
+        {
+            var cli = new ClaimsIdentity();
+            cli.AddClaim(new Claim("emailaddress", "psmarques@gmail.com"));
+            cli.AddClaim(new Claim("/name", "Paulo Marques"));
+            cli.AddClaim(new Claim("picture", "xyz"));
 
+            var r = new ClaimsPrincipal(cli);
+
+            return r;
+        }
     }
 }

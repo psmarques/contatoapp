@@ -1,12 +1,9 @@
-﻿using CadContato.Domain.Commands.Contato;
-using CadContato.Domain.Handlers;
+﻿using CadContato.Domain.Handlers;
 using CadContato.Shared.Commands;
 using CadContato.Tests.Commands;
 using CadContato.Tests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Security.Claims;
 
 namespace CadContato.Tests.Handlers
 {
@@ -20,11 +17,24 @@ namespace CadContato.Tests.Handlers
         {
             var tst = new CreateContatoCommandTest();
             var handler = new ContatoHandler(new FakeContatoRepository(), new FakeUserRepository());
-
-            var r = (GenericCommandResult) handler.Handle(tst.CommandInvalido);
+            
+            tst.CommandValido.Email = string.Empty;
+            var r = (GenericCommandResult)handler.Handle(tst.CommandValido, CriarFakeClaims());
+            
             Assert.IsFalse(r.Success);
             Assert.IsNotNull(r.Message);
+        }
 
+        private ClaimsPrincipal CriarFakeClaims()
+        {
+            var cli = new ClaimsIdentity();
+            cli.AddClaim(new Claim("emailaddress", "psmarques@gmail.com"));
+            cli.AddClaim(new Claim("/name", "Paulo Marques"));
+            cli.AddClaim(new Claim("picture", "xyz"));
+
+            var r = new ClaimsPrincipal(cli);
+
+            return r;
         }
 
     }
