@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: psmarquescontatoapp 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psmarquescontatoapp
+  template:
+    metadata:
+      labels:
+        app: psmarquescontatoapp 
+    spec:
+      containers:
+        - name: psmarquescontatoapp 
+          image: paulomarques.azurecr.io/psmarquescontatoapp
+          ports:
+          - containerPort: 80
